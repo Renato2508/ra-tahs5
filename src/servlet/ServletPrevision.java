@@ -23,19 +23,33 @@ public class ServletPrevision  extends HttpServlet{
             String daty = request.getParameter("date");
             Date date = Date.valueOf(daty);
 
-            Connect connect = new Connect();
-            connect.getConnectionPostGresql();
-            Connection con = connect.getConnection();
-            
-            //chargement des données meteo
-            HashMap<Date, Meteo> meteoPrec = Meteo.getMap(Meteo.getAll(con));
-            
-            // chargement des données des sources
-            Vector<Source> sources = Source.getAll(con);
-            
+            try {
 
-            
-            request.setAttribute(nomBouquet, nomBouquet);
-            response.sendRedirect("Post_Bouquet.html");
-    }
+                Connect connect = new Connect();
+                connect.getConnectionPostGresql();
+                Connection con = connect.getConnection();
+                
+                //chargement des données meteo
+                HashMap<Date, Meteo> meteoPrec = Meteo.getMap(Meteo.getAll(con, date));
+                System.out.println("Récupération des données meteo: "+meteoPrec);
+
+                
+                // chargement des données des sources
+                Vector<Source> sources = Source.getAll(con);
+                System.out.println("Récupération des données des sources: "+sources);
+
+                for(Source s : sources){
+                    s.setListeEtat(s.generatePrevisions(date, 8, 17, meteoPrec, con));
+                }
+
+                con.close();
+                 request.setAttribute("sources", sources);
+                 RequestDispatcher rd = request.getRequestDispatcher("result.jsp");
+                 rd.forward(request, response);
+
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 }

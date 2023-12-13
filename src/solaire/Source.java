@@ -46,6 +46,20 @@ public class Source {
         this.batterie.setReserve(this.batterie.getCapacite());
     }  
 
+    public Vector<Etat> generatePrevisions(Date date, int heureDebut, int heureFin, HashMap<Date, Meteo> meteo, Connection conn)throws Exception{
+        try {
+            Meteo meteoJour = meteo.get(date);
+            HashMap<Date, Meteo> meteo2 = new HashMap<Date, Meteo>(meteo);
+            meteo2.remove(date);
+            this.setDemandeMoy(this.getDemandeMoy(meteo2, heureDebut, heureFin));
+            this.getElevesPrevus(conn, date);
+            return this.getListeEtat(heureDebut, heureFin, meteoJour);
+            
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     public void getElevesPrevus(Connection conn, Date date) throws Exception{
         Utils.getMethodInfo();
         System.out.println("----> Source: "+ this.nomSource+ " Recherche du nombre d'élèves prévus");
@@ -63,6 +77,7 @@ public class Source {
         Vector<Source> res = new Vector<Source>();
         try {
             String sql = "SELECT * FROM v_source_all order by idsource asc, idbatiment asc";
+            System.out.println("******* SOURCE: "+sql);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
@@ -106,7 +121,7 @@ public class Source {
     }
 
 
-    public double getDemandeMoy(Date date, Meteo meteo) throws Exception{
+    public double getDemandeMoy(Date date, int heureDebut, int heureFin, Meteo meteo) throws Exception{
         Utils.getMethodInfo();
         System.out.println(this.nomSource+"----> Calcul de la demande moyenne le "+ date);
 
@@ -127,7 +142,7 @@ public class Source {
         
         try {
             // premiere estimtion avec la valeur par défaut
-            Vector<Etat> etats = this.getListeEtat(8, 17, meteo);
+            Vector<Etat> etats = this.getListeEtat(heureDebut, heureFin, meteo);
             Etat etat = etats.get(etats.size()-1);
             Time heureCoupureEstimee = etat.getHeureFin();
             System.out.println("#### ESTIMATIONS SUR LA COUPURE: "+etat.toString());
@@ -181,7 +196,7 @@ public class Source {
         
     }
 
-    public double getDemandeMoy(HashMap<Date, Meteo> meteo) throws Exception{
+    public double getDemandeMoy(HashMap<Date, Meteo> meteo, int heureDebut, int heureFin) throws Exception{
         Utils.getMethodInfo();
         System.out.println(this.nomSource+"----> Calcul de la demande moyenne journalière");
         Set<Date> keys = meteo.keySet();
@@ -192,9 +207,12 @@ public class Source {
         try {
 
             for(Date date: keys){
-            meteoCourante = meteo.get(date);
-            demandeJ = this.getDemandeMoy(date, meteoCourante);
-            liste.add(demandeJ);
+                meteoCourante = meteo.get(date);
+                if(this.coupuresPrec.get(date) != null){
+                    demandeJ = this.getDemandeMoy(date, heureDebut, heureFin, meteoCourante);
+                    liste.add(demandeJ);
+                }
+                
             }
 
             // calcul de la moyenne

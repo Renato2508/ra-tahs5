@@ -36,12 +36,13 @@ public class Meteo {
         return res;
     }
 
-    public static Vector<Meteo> getAll(Connection conn) throws Exception{
+    public static Vector<Meteo> getAll(Connection conn, Date lim) throws Exception{
         Utils.getMethodInfo();
 
         Vector<Meteo> meteos = new Vector<Meteo>();
         try {
-            String sql = "SELECT * FROM meteo";
+            String sql = String.format("SELECT * FROM meteo where jour <= '%s'", lim);
+            System.out.println("****    getMeteo: "+ sql);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 

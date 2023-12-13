@@ -1,0 +1,17 @@
+public class Etat {
+    Time heure;
+    Time heureFin;
+    double demande;
+    double demandePanneau;
+    double demandeBatterie;
+    double batterieInitiale;
+    double batterieInitialePerc;
+    double reserveBatterie;
+    double reserveBatteriePerc;
+    String status; 
+}
+Ecrire un code jsp selon les instruction suivantes
+j'ai un Vector<Etat> etats, je veux afficher son contenu dans un tableau jsp
+créer les entetes nécessaires et boucler sur le Vector poiur créeer les ligne et les celulles du tableau html;
+ne pas ajouter de colonne pour batterieInitialePerc et reserveBatteriePerc mais au lieu de cela mettre leur valeurs entre ( en %) respectivement à coté de batterieInitiale et reserveBatterie
+
