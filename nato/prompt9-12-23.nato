@@ -1,0 +1,22 @@
+public int getElevesPrevus(Connection conn, Date date, char heure){
+        int res;
+        try {
+            String sql = "SELECT elevesPresents(?, ?, ?)";
+            PreparedStatement stmt
+
+-- continue d'ecrire cette fonction, le but est de retourner la valeur de retour de la fonction elevesPresents
+
+
+-- alimenter la classe Meteo à l'aide des données de la table suivantes
+    CREATE TABLE meteo (
+   jour date,
+   heure int,
+   indice INTEGER
+);
+
+public class Meteo {
+    Date jour;
+    HashMap<Integer, Integer> luminosite;
+
+-- chaque paire cle valeur du hashmap represente chaque paire (heure, indice) de la table 
+-- écrire la fonction public static Vector<Meteo> getAll(Connection)

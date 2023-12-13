@@ -1,0 +1,164 @@
+-- ECRIRE LE CODE JAVA DES CLASSES QUE JE VAIS DECRIRE  AVEC LEURS ATTRIBUTS
+--  chaque classe ira dans une fenetre formatée individuelle
+-- toutes ces classes iront dans le package solaire;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- GENERER DES SCRIPTS D'INSERTION pour les tables suivantes:
+CREATE TABLE batterie (
+   idBatterie SERIAL PRIMARY KEY,
+   nomBatterie VARCHAR(255),
+   capacite numeric(9,2)
+);
+
+CREATE TABLE panneau (
+   idPanneau SERIAL PRIMARY KEY,
+   nomPanneau VARCHAR(255),
+   puissance numeric(9,2)
+);
+
+-- générer un script pour  4 panneaux et 4 batteries
+-- puissances à 10000
+-- capacite à 50000
+
+CREATE TABLE source (
+   idSource SERIAL PRIMARY KEY,
+   nomSource VARCHAR(255),
+   idPanneau INTEGER REFERENCES panneau(idPanneau),
+   idBatterie INTEGER REFERENCES batterie(idBatterie)
+);
+
+-- générer les scrpts pour deux sources et donner à chaque source 2 panneaux et 2 batteries de celles crééer plus haut
+
+CREATE TABLE batiment (
+   idBatiment SERIAL PRIMARY KEY,
+   nomBatiment VARCHAR(255),
+   idSource INTEGER REFERENCES source(idSource)
+);
+
+-- script pour insérer 2 batiments et donner a chaque batiment  1 source
+
+CREATE TABLE meteo (
+   jour date,
+   heure int,
+   indice INTEGER
+);
+
+-- la date d'aujourd'hui et demain
+-- l'indice varie de  a 10
+-- chaque heure de 8 à 17 doit avoir un indice
+
+
+CREATE TABLE presence (
+   idBatiment INTEGER REFERENCES batiment(idBatiment),
+   datePresence DATE,
+   trancheHoraire CHAR,
+   nbrEleve INTEGER
+);
+-- script pour créer des présence pour aujourd'hui et pour demain
+-- chaque jour comprend 2 tranches horaires 'M' et 'A'
+-- tu choisis une valeur entre 200 et 300 chque nbrEleve
+
+CREATE TABLE coupure (
+   dateCoupure DATE,
+   idSource INTEGER REFERENCES source(idSource),
+   heureCoupure TIME
+);
+
+créer le script pour inserer  une coupure pour aujourd'hui et pour demain
+-- insérer une coupure par source
+-- heure de coupure entre 12 et 17h
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- GENERATION DU SCRIPT DE BASE DE DONNEES
+    --  creer le script  SQL POUR POSTGRESQL qui génère la BASE DE DONNEE SUIVANTE ainsi que les tables données et les vues ainsi que les fonctions en base DB qui suivent. Les tables, les vues, et les fonctions  seront dans des fenêtres formatées différentes.
+
+    -- nom de la base de donnees: solaire
+    -- TABLES
+        -- batterie 
+            -- idBatterie serial primary key
+            -- nomBatterie
+            -- capacite double
+
+        -- panneau
+            -- idPanneau serial primary key
+            -- nomPanneau varchar
+            -- puissance double
+
+        -- source
+            -- idSource serial primary key
+            -- nomSource varchar
+            -- idPanneau foreign key( panneau.idPanneau)
+            -- idBatterie foreing key (batterie.batterie)
+
+        -- batiment
+            -- idBatiment serial primar key
+            -- nomBatiment varchar
+            -- idSource foreign key (source.idSource)
+
+        -- meteo
+            -- moment datetime
+            -- indice int
+
+        -- presence
+            -- idBatiment references batiment.idBatiment
+            -- datePresence date
+            -- trancheHoraire char
+            -- nbrEleve int
+
+        -- coupure 
+            -- dateCoupure date
+            -- idSource
+            -- heureCoupure time
+    
+    -- VUES 
+        -- compléter les colonne du  select dans  v_source_all avec le nom des autres colonnes des autres tables ou vues (v_batiment_presence)mentionnées dans les jointures sauf la COLONNE s.idSource de chaque table ou vue en te basant sur les tables qu'on a créées plus haut .
+        voici les codes nécessaires pour commencer 
+
+        CREATE VIEW v_batiment_presence AS
+        SELECT b.idBatiment, b.nomBatiment, b.idSource, p.datepresence, p.tranchehoraire, p.nbretudiant
+        FROM batiment as b
+        JOIN presence  as p ON  presence.idBatiment = batiment.idBatiment 
+
+
+        CREATE VIEW v_source_all AS
+        SELECT source.*, 
+        FROM source as s
+        JOIN batiment as b on b.idSource = s.idsource
+        join coupure as c on c.idSource = s.idSource
+        join panneau as p on s.idPanneau = p.idPanneau
+        join batterie as bt on s.idBatterie = bt.idBatterie
+        join v_batiment_presence as vp on vp.idSource = s.idSource
+
+    -- FONCTIONS
+        -- créer la fonction SQL de signature logique int elevesPresents(datePresence, idBatiment, trancheHoraire)
+            -- récuperer le jour de la semaine de datePresence
+            -- faire un select dans la vue v_batiment_presence (qui prendra la moyenne de la colonne nbrEleve et en l'arrondissant) where le jour de la semaine de la colonne datePresence de ladite vue correspond au jour de la semaine mentionné plus haut ET où l'idBatiment correspond à l'argument idBatiment ET où la trancheHoraire correspond à l'argument trancheHoraire
+        
