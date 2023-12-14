@@ -12,6 +12,10 @@
         <label for="dt1">Date de prévision :</label>
         <input type="date" id="dt1" name="date"><br>
 
+         <label for="dt1">Precision des previsions (secondes):</label>
+        <input type="text" id="dt1" name="precision"><br>
+
+
         <input type="submit" value="Générer les prévisions">
     </form>
 
