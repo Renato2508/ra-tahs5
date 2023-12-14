@@ -7,6 +7,7 @@ public class Etat {
     Source source;
     Time heure;
     Time heureFin;
+    int nbrel;
     double demande;
     double demandePanneau;
     double demandeBatterie;
@@ -35,7 +36,7 @@ public class Etat {
     
     public Etat(Source source, Time heure, Time heureFin, double demande, double demandePanneau, double demandeBatterie,
             double batterieInitiale, double batterieInitialePerc, double reserveBatterie, double reserveBatteriePerc,
-            String status) {
+            String status, int nbrel) {
         this.source = source;
         this.heure = heure;
         this.heureFin = heureFin;
@@ -47,6 +48,7 @@ public class Etat {
         this.reserveBatterie = reserveBatterie;
         this.reserveBatteriePerc = reserveBatteriePerc;
         this.status = status;
+        this.nbrel = nbrel;
     }
 
     
@@ -124,5 +126,15 @@ public class Etat {
     @Override
     public String toString() {
         return String.format("####### SOURCE : %s       DEMANDE MOY: %f     NBR: %d     Debut: %s     Fin: %s     Demande: %f     sur Panneau: %f      sur batterie: %f       Batterie Initiale: %f(%f %%)        Batterie Finale: %f (%f %%)   STATUS: %s \n",this.source.getNomSource(),this.source.getDemandeMoy(),  this.source.getNbrEleves(), this.heure, this.heureFin, this.demande,  this.demandePanneau, this.demandeBatterie, this.batterieInitiale, this.batterieInitialePerc, this.reserveBatterie, this.reserveBatteriePerc, this.status );            
+    }
+
+
+    public int getNbrel() {
+        return nbrel;
+    }
+
+
+    public void setNbrel(int nbrel) {
+        this.nbrel = nbrel;
     }
 }

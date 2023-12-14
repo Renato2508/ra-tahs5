@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 public class Source {
+    static int precision = 1;
     int idSource;
     String nomSource;
     Panneau panneau;
@@ -153,8 +154,9 @@ public class Source {
             else{
                 //System.out.println("");
                 Dichotomie dichotomie = new Dichotomie(this.demandeMoy);
+                //int precision =  1;
 
-                while(heureCoupureEstimee.equals(heureCoupure) == false){
+                while(heureCoupureEstimee.equals(heureCoupure) == false && Math.abs(heureCoupureEstimee.toLocalTime().toSecondOfDay() -heureCoupure.toLocalTime().toSecondOfDay())  > precision ){
                     System.out.println(String.format("#### REELLE: %s   ESTIMATION: %s",heureCoupure, heureCoupureEstimee));
 
                     // remettre la réserve à sa capacité initiale à chaque itération de la simulation 
@@ -313,7 +315,7 @@ public class Source {
                      // l'etat final
                      //Etat etat = new Etat(this,heureCoupure, demande,   solaireDispo, demande-solaireDispo, this.batterie.getReserve(), batterieRestePerc, "DOWN");
 
-                     Etat etat=new Etat(this,heureInit,heureCoupure,demande, solaireDispo, demandeBatterie, reserveInitiale, reserveInitialePerc, this.batterie.getReserve(), batterieRestePerc,"DOWN");
+                     Etat etat=new Etat(this,heureInit,heureCoupure,demande, solaireDispo, demandeBatterie, reserveInitiale, reserveInitialePerc, this.batterie.getReserve(), batterieRestePerc,"DOWN", this.nbrEleves);
 
                     // constructeur de l'Exception
                     BatterieInsuffisanteException e = new  BatterieInsuffisanteException("Batterie épuisée à "   +heureCoupure, etat);
@@ -337,7 +339,7 @@ public class Source {
                     //res = new Etat(this, heureInit, heurFin, demande, solaireDispo, demande-solaireDispo, this.batterie.getReserve(), reservePerc, "UP"); 
 
 
-                     res =new Etat(this,heureInit, heureFin, demande, solaireDispo, demande-solaireDispo, reserveInitiale, reserveInitialePerc, this.batterie.getReserve(), reservePerc,"UP");
+                     res =new Etat(this,heureInit, heureFin, demande, solaireDispo, demande-solaireDispo, reserveInitiale, reserveInitialePerc, this.batterie.getReserve(), reservePerc,"UP", this.nbrEleves);
                 }
                 catch(Exception e){
                         throw e;                
@@ -353,7 +355,7 @@ public class Source {
             Time heureFin = new Time(heureDebut+1,0 ,0);
             //res = new Etat(this,new Time(heureDebut,0,0), demande, solaireDispo, 0, this.batterie.getReserve(), this.batterie.getReservePerc(), "UP");
 
-            res =new Etat(this,heureInit, heureFin, demande, solaireDispo, 0, reserveInitiale, reserveInitialePerc, this.batterie.getReserve(), this.batterie.getReservePerc(),"UP");
+            res =new Etat(this,heureInit, heureFin, demande, solaireDispo, 0, reserveInitiale, reserveInitialePerc, this.batterie.getReserve(), this.batterie.getReservePerc(),"UP", this.nbrEleves);
         }
         //System.out.println(res.toString());
         return res;
@@ -426,6 +428,18 @@ public class Source {
 
     public void setNbrEleves(int nbrEleves) {
         this.nbrEleves = nbrEleves;
+    }
+
+
+
+    public static int getPrecision() {
+        return precision;
+    }
+
+
+
+    public static void setPrecision(int precision) {
+        Source.precision = precision;
     }
     
 }

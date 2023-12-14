@@ -21,6 +21,8 @@ import connect.Connect;
 public class ServletPrevision  extends HttpServlet{
         public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             String daty = request.getParameter("date");
+            int precision  = Integer.valueOf(request.getParameter("precision"));
+            Source.setPrecision(precision);
             Date date = Date.valueOf(daty);
 
             try {
