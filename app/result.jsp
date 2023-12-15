@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import = "java.util.*" %>
 <%@ page import = "solaire.*" %>
+<%@ page import="java.text.DecimalFormat" %>
 
 <!DOCTYPE html>
 <html>
@@ -78,15 +79,17 @@ tr:nth-child(even) {
                 <%
                     for (Etat etat : etats) {
                 %>
-                <tr>
+                <tr>    
+                    <%  DecimalFormat df = new DecimalFormat();  %>
+
                     <td><%= etat.getHeure() %></td>
                     <td><%= etat.getHeureFin() %></td>
                     <td><%= etat.getNbrel() %></td>
-                    <td><%= etat.getDemande() %></td>
-                    <td><%= etat.getDemandePanneau() %></td>
-                    <td><%= etat.getDemandeBatterie() %></td>
-                    <td><%= etat.getBatterieInitiale() + " (" + etat.getBatterieInitialePerc() + " %)" %></td>
-                    <td><%= etat.getReserveBatterie() + " (" + etat.getReserveBatteriePerc() + " %)" %></td>
+                    <td><%= df.format(etat.getDemande()) %></td>
+                    <td><%= df.format(etat.getDemandePanneau()) %></td>
+                    <td><%= df.format(etat.getDemandeBatterie()) %></td>
+                    <td><%= df.format(etat.getBatterieInitiale()) + " (" + df.format(etat.getBatterieInitialePerc()) + " %)" %></td>
+                    <td><%= df.format(etat.getReserveBatterie()) + " (" + df.format(etat.getReserveBatteriePerc()) + " %)" %></td>
                     <td><%= etat.getStatus() %></td>
                 </tr>
                 <%

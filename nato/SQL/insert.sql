@@ -1,3 +1,25 @@
+
+--- METEO
+
+INSERT INTO meteo (jour, heure, indice)
+VALUES ('2023-12-8', 8, 4);
+INSERT INTO meteo (jour, heure, indice)
+VALUES ('2023-12-8', 9, 5);
+INSERT INTO meteo (jour, heure, indice)
+VALUES ('2023-12-8', 10, 8);
+INSERT INTO meteo (jour, heure, indice)
+VALUES ('2023-12-8', 11, 8);
+INSERT INTO meteo (jour, heure, indice)
+VALUES ('2023-12-8', 14, 9);
+INSERT INTO meteo (jour, heure, indice)
+VALUES ('2023-12-8', 15, 9);
+INSERT INTO meteo (jour, heure, indice)
+VALUES ('2023-12-8', 16, 9);
+INSERT INTO meteo (jour, heure, indice)
+VALUES ('2023-12-8', 17, 9);
+
+
+
 INSERT INTO panneau (nomPanneau, puissance)
 VALUES
 ('Panneau1', 10000),
@@ -39,26 +61,6 @@ VALUES ('2023-12-7', 16, 7);
 INSERT INTO meteo (jour, heure, indice)
 VALUES ('2023-12-7',17 , 6);
 
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 8, 4);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 9, 5);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 10, 8);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 11, 8);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 12, 9);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8',13 , 9);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 14, 10);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 15, 8);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8',16 , 7);
-INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8',17 , 6);
 
 INSERT INTO presence (idBatiment, datePresence, trancheHoraire, nbrEleve)
 VALUES

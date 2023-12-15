@@ -12,6 +12,14 @@
         <label for="dt1">Date de prévision :</label>
         <input type="date" id="dt1" name="date"><br>
 
+        <label for="dt1">Debut prevision :</label>
+        <input type="text" id="dt1" name="debut"><br>
+
+        <label for="dt1">Fin de prévision :</label>
+        <input type="text" id="dt1" name="fin"><br>
+
+
+
          <label for="dt1">Precision des previsions (secondes):</label>
         <input type="text" id="dt1" name="precision"><br>
 

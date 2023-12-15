@@ -54,7 +54,7 @@ public class Source {
             meteo2.remove(date);
             this.setDemandeMoy(this.getDemandeMoy(meteo2, heureDebut, heureFin));
             this.getElevesPrevus(conn, date);
-            return this.getListeEtat(heureDebut, heureFin, meteoJour);
+            return this.getListeEtat(heureDebut, heureFin, meteoJour, date);
             
         } catch (Exception e) {
             throw e;
@@ -143,7 +143,7 @@ public class Source {
         
         try {
             // premiere estimtion avec la valeur par défaut
-            Vector<Etat> etats = this.getListeEtat(heureDebut, heureFin, meteo);
+            Vector<Etat> etats = this.getListeEtat(heureDebut, heureFin, meteo, date);
             Etat etat = etats.get(etats.size()-1);
             Time heureCoupureEstimee = etat.getHeureFin();
             System.out.println("#### ESTIMATIONS SUR LA COUPURE: "+etat.toString());
@@ -166,7 +166,7 @@ public class Source {
                     if(heureCoupureEstimee.before(heureCoupure)){
                         System.out.println("#### COUPURE TROP TOT");
                         this.setDemandeMoy(dichotomie.dichotomie('-'));
-                        etats = this.getListeEtat(8, 17, meteo);
+                        etats = this.getListeEtat(heureDebut, heureFin, meteo, date);
                         etat = etats.get(etats.size()-1);
                         heureCoupureEstimee = etat.getHeureFin();
                         System.out.println("#### ESTIMATIONS SUR LA COUPURE: "+etat.toString());
@@ -178,7 +178,7 @@ public class Source {
                         System.out.println("#### COUPURE TROP TARD");
 
                         this.setDemandeMoy(dichotomie.dichotomie('+'));
-                        etats = this.getListeEtat(8, 17, meteo);
+                        etats = this.getListeEtat(heureDebut, heureFin, meteo, date);
                         etat = etats.get(etats.size()-1);
                         heureCoupureEstimee = etat.getHeureFin();
                         System.out.println("#### ESTIMATIONS SUR LA COUPURE: "+etat.toString());
@@ -191,6 +191,7 @@ public class Source {
             
          } 
         catch(PrecisionException pe) {
+            pe.printStackTrace();
             return this.demandeMoy;
         } catch (Exception e) {
             throw e;
@@ -230,7 +231,7 @@ public class Source {
         
     }
 
-    public Vector<Etat> getListeEtat(int heureDebut, int heureFin,Meteo meteo) throws Exception{
+    public Vector<Etat> getListeEtat(int heureDebut, int heureFin,Meteo meteo, Date date) throws Exception{
         Utils.getMethodInfo();
         System.out.println(this.nomSource+"------> calcul des états entre "+heureDebut +" et "+heureFin);
         Vector<Etat> res = new Vector<Etat>();
@@ -240,22 +241,26 @@ public class Source {
         for(int heure = heureDebut; heure < heureFin; heure++){
             System.out.println(">>>>> Calcul de l'etat a: "+heure + "h");
             luminosite = meteo.getLuminosite().get(heure);
-            if(luminosite==null)
-                luminosite = 0;
+            if(luminosite != null){
+                    Etat etat = null;
+                try {
+                    etat = this.getEtat(heure, luminosite);
+                    etat.setDate(date);
+                    res.add(etat);
+                } catch (BatterieInsuffisanteException e) {
+                    System.out.println("!!!!! Coupure détectée: "+this.nomSource + " HEURE: " + e.getEtat().    getHeureFin());
+                    Etat et = e.getEtat(); 
+                    et.setDate(date);                  
+                    res.add(et);
+                    break;
+                }
+                catch (Exception ex){
+                    //ex.printStackTrace();
+                    throw ex;
+                }
 
-            Etat etat = null;
-            try {
-                etat = this.getEtat(heure, luminosite);
-                res.add(etat);
-            } catch (BatterieInsuffisanteException e) {
-                System.out.println("!!!!! Coupure détectée: "+this.nomSource + " HEURE: " + e.getEtat().getHeureFin());
-                res.add(e.getEtat());
-                break;
             }
-            catch (Exception ex){
-                //ex.printStackTrace();
-                throw ex;
-            }
+
         }
         return res;
     }
@@ -285,10 +290,7 @@ public class Source {
 
         // puissance solaire disponible
         double solaireDispo = this.panneau.getPuissance()*((double)lumiere/10);
-        //System.out.println("PUISSANCE: " + /*this.panneau.getPuissance()/**/(lumiere/10));
-        //msg =String.format(" ##### Demande ponctuelle à %d h :  %f W        Capacite SOlaire Max: %f W       //solaire Disponible:  %f W       Batterrie: %f  Wh       Niveau de batterie: %f  \n  ",heureDebut, demande, this.//panneau.getPuissance(), solaireDispo, this.batterie.getCapacite(), this.batterie.getEnergieDispo());
-        //System.out.println(msg);
-
+        
         // cas d'usage de la batterie;
         if(solaireDispo < demande){
             System.out.println("BRANCHEMENT SUR BATTERIE");
@@ -348,14 +350,15 @@ public class Source {
                            
             }
         }
-        // le solaire seul suffit  pour alimenter tout
+        // le solaire seul suffi  pour alimenter tout
         else{
             System.out.println("Le solaire a suffi pour la tranche : "+ heureDebut +" h");
             Time heure = new Time(0,0,0);
             Time heureFin = new Time(heureDebut+1,0 ,0);
-            //res = new Etat(this,new Time(heureDebut,0,0), demande, solaireDispo, 0, this.batterie.getReserve(), this.batterie.getReservePerc(), "UP");
+            double restePuissance = solaireDispo - demande;
+            this.batterie.charger(restePuissance);
 
-            res =new Etat(this,heureInit, heureFin, demande, solaireDispo, 0, reserveInitiale, reserveInitialePerc, this.batterie.getReserve(), this.batterie.getReservePerc(),"UP", this.nbrEleves);
+            res =new Etat(this,heureInit, heureFin, demande, demande, 0, reserveInitiale, reserveInitialePerc, this.batterie.getReserve(), this.batterie.getReservePerc(),"UP", this.nbrEleves);
         }
         //System.out.println(res.toString());
         return res;

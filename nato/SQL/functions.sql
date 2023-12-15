@@ -16,4 +16,4 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-select elevesPresents('2023-12-14', 1,'M');
+select elevesPresents('2023-12-13', l,'M');

@@ -30,11 +30,14 @@ public class Dichotomie {
             if((this.droite - this.gauche) <= Math.pow(10, -9))
                 throw new PrecisionException("Limite de précision atteinte: " + (this.droite - this.gauche));
             
-        } catch (Exception e) {
-            if (e instanceof PrecisionException)
-                throw e;
+        } 
+        catch (PrecisionException e){
+            throw e;
         }
-        
+        catch(Exception e1){
+            e1.printStackTrace();
+        }
+       
         if(s == '-'){
             System.out.println("#### opération : GAUCHE ");
             this.droite = this.centre;

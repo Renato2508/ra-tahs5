@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class App {
     public static void main(String[] args) throws Exception {
-            String daty = "2023-12-14";
+            String daty = "2023-12-13";
             Date date = Date.valueOf(daty);
 
             try {
@@ -33,7 +33,7 @@ public class App {
                 System.out.println("Récupération des données des sources: "+sources);
 
                 for(Source s : sources){
-                    s.setListeEtat(s.generatePrevisions(date, 8, 17, meteoPrec, con));
+                    s.setListeEtat(s.generatePrevisions(date, 8, 18, meteoPrec, con));
                 }
 
                 con.close();

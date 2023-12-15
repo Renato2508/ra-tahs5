@@ -1,5 +1,7 @@
 package solaire;
 
+import solaire.exception.OverchargeException;
+import solaire.exception.UnderchargeException;
 import solaire.utils.Utils;
 
 public class Batterie {
@@ -22,7 +24,24 @@ public class Batterie {
 
     // methods
 
-    
+    public void charger(double energie){
+        try {
+            double nouvelleCharge = this.reserve + energie;
+            this.setReserve(nouvelleCharge);
+
+        } catch (OverchargeException oce) {
+            try {
+                
+                this.setReserve(this.capacite);
+
+            } catch (Exception e) {
+            }
+        }
+        catch(UnderchargeException uce){
+
+        }
+    }
+
     public double getTempsRestant(double puissance){
         Utils.getMethodInfo();
         return getEnergieDispo()/puissance;
@@ -66,9 +85,12 @@ public class Batterie {
         return reserve;
     }
 
-    public void setReserve(double reserve) throws Exception {
-        if(reserve > this.capacite || reserve < 0)
-            throw new Exception("Valeur de reserve d'énergie impossible pour cette batterie: "+reserve);
+    public void setReserve(double reserve) throws UnderchargeException, OverchargeException {
+        if(reserve > this.capacite )
+            throw new OverchargeException("Surcharge détectée");
+        
+        else if(reserve < 0)
+            throw new UnderchargeException("Charge négative détectée");
         this.reserve = reserve;
     }
 

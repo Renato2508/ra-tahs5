@@ -1,6 +1,7 @@
 
 package solaire;
 
+import java.sql.Date;
 import java.sql.Time;
 
 public class Etat {
@@ -16,6 +17,7 @@ public class Etat {
     double reserveBatterie;
     double reserveBatteriePerc;
     String status;
+    Date date;
 
     
 
@@ -125,7 +127,7 @@ public class Etat {
 
     @Override
     public String toString() {
-        return String.format("####### SOURCE : %s       DEMANDE MOY: %f     NBR: %d     Debut: %s     Fin: %s     Demande: %f     sur Panneau: %f      sur batterie: %f       Batterie Initiale: %f(%f %%)        Batterie Finale: %f (%f %%)   STATUS: %s \n",this.source.getNomSource(),this.source.getDemandeMoy(),  this.source.getNbrEleves(), this.heure, this.heureFin, this.demande,  this.demandePanneau, this.demandeBatterie, this.batterieInitiale, this.batterieInitialePerc, this.reserveBatterie, this.reserveBatteriePerc, this.status );            
+        return String.format("####### SOURCE : %s       DATE: %s        DEMANDE MOY: %f     NBR: %d     Debut: %s     Fin: %s     Demande: %f     sur Panneau: %f      sur batterie: %f       Batterie Initiale: %f(%f %%)        Batterie Finale: %f (%f %%)   STATUS: %s \n",this.source.getNomSource(),this.getDate(),this.source.getDemandeMoy(),  this.source.getNbrEleves(), this.heure, this.heureFin, this.demande,  this.demandePanneau, this.demandeBatterie, this.batterieInitiale, this.batterieInitialePerc, this.reserveBatterie, this.reserveBatteriePerc, this.status );            
     }
 
 
@@ -136,5 +138,15 @@ public class Etat {
 
     public void setNbrel(int nbrel) {
         this.nbrel = nbrel;
+    }
+
+
+    public Date getDate() {
+        return date;
+    }
+
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

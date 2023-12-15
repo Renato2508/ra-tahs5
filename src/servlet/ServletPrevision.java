@@ -24,6 +24,8 @@ public class ServletPrevision  extends HttpServlet{
             int precision  = Integer.valueOf(request.getParameter("precision"));
             Source.setPrecision(precision);
             Date date = Date.valueOf(daty);
+            int debut = Integer.valueOf(request.getParameter("debut"));
+            int fin = Integer.valueOf(request.getParameter("fin"));
 
             try {
 
@@ -33,15 +35,15 @@ public class ServletPrevision  extends HttpServlet{
                 
                 //chargement des données meteo
                 HashMap<Date, Meteo> meteoPrec = Meteo.getMap(Meteo.getAll(con, date));
-                System.out.println("Récupération des données meteo: "+meteoPrec);
+                //System.out.println("Récupération des données meteo: "+meteoPrec);
 
                 
                 // chargement des données des sources
                 Vector<Source> sources = Source.getAll(con);
-                System.out.println("Récupération des données des sources: "+sources);
+                //System.out.println("Récupération des données des sources: "+sources);
 
                 for(Source s : sources){
-                    s.setListeEtat(s.generatePrevisions(date, 8, 17, meteoPrec, con));
+                    s.setListeEtat(s.generatePrevisions(date, debut, fin, meteoPrec, con));
                 }
 
                 con.close();
