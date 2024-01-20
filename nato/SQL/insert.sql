@@ -2,21 +2,21 @@
 --- METEO
 
 INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 8, 4);
+VALUES ('2024-1-3', 8, 9);
 INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 9, 5);
+VALUES ('2024-1-3', 9, 9);
 INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 10, 8);
+VALUES ('2024-1-3', 10, 9);
 INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 11, 8);
+VALUES ('2024-1-3', 11, 9);
 INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 14, 9);
+VALUES ('2024-1-3', 14, 8);
 INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 15, 9);
+VALUES ('2024-1-3', 15, 8);
 INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 16, 9);
+VALUES ('2024-1-3', 16, 8);
 INSERT INTO meteo (jour, heure, indice)
-VALUES ('2023-12-8', 17, 9);
+VALUES ('2024-1-3', 17, 9);
 
 
 
